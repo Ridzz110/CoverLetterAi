@@ -1,12 +1,11 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Upload, Check, AlertCircle } from "lucide-react"
 
 interface FileUploaderProps {
-  onUploadSuccess: () => void
+  onUploadSuccess: (file: File) => void
 }
 
 export function FileUploader({ onUploadSuccess }: FileUploaderProps) {
@@ -53,7 +52,7 @@ export function FileUploader({ onUploadSuccess }: FileUploaderProps) {
       return
     }
     setFile(file)
-    onUploadSuccess()
+    onUploadSuccess(file) // Pass the file object to the parent component
   }
 
   return (

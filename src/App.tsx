@@ -7,8 +7,9 @@ import { cn } from "./lib/utils";
 import { TypewriterEffectSmooth } from './components/ui/typewriter-effect';
 import { Briefcase, FileText, Settings, Download, HelpCircle, Check } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
-import { BrowserRouter , Routes, Route, Navigate, Link} from 'react-router-dom';
+import { BrowserRouter , Routes, Route, Link} from 'react-router-dom';
 import Dashboard from './Pages/Dashboard';
+import { JSX } from 'react/jsx-runtime';
 
 interface HomeProps {
   words: { text: string; className?: string }[];
@@ -292,7 +293,7 @@ export default function App() {
     {
       name: "Pro",
       price: "$9.99",
-      period: "monthly",
+      period: "every 3 months",
       description: "Ideal for active job hunters",
       features: [
         "Unlimited cover letters",
@@ -307,7 +308,7 @@ export default function App() {
     {
       name: "Team",
       price: "$24.99",
-      period: "monthly",
+      period: "every 3 months",
       description: "For career coaches & teams",
       features: [
         "Everything in Pro",
@@ -336,12 +337,15 @@ export default function App() {
       <DotPattern className='fixed top-0 left-0 w-full h-full opacity-10' />
       
       <header className='relative z-10 w-full h-14 flex items-center justify-end px-4 sm:px-6'>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+      <>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+        </>
+
         <Link to="/dashboard">
           <Button className="ml-4 py-6 hover:text-white border-neutral-200"> Try it </Button>
         </Link>

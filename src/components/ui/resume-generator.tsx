@@ -1,3 +1,5 @@
+// Full component with updated file handling
+
 "use client"
 
 import { useState } from "react"
@@ -8,33 +10,59 @@ import { FileUploader } from "./file-uploader"
 import { ResumeOutput } from "./resume-output"
 import { Loader2, FileText, Sparkles } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
+import axios from "axios" 
 
 export function ResumeGenerator() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [jobDescription, setJobDescription] = useState("")
   const [cvUploaded, setCvUploaded] = useState(false)
+  const [cvFile, setCvFile] = useState<File | null>(null)
   const [tailoredResume, setTailoredResume] = useState("")
   const [showOutput, setShowOutput] = useState(false)
 
-  const handleGenerate = () => {
-    if (!cvUploaded || !jobDescription.trim()) return
+  const handleFileUploadSuccess = (file: File) => {
+    setCvFile(file)
+    setCvUploaded(true)
+  }
+
+  const handleGenerate = async () => {
+    if (!cvUploaded || !cvFile || !jobDescription.trim()) {
+      // Show error or notification to user
+      return
+    }
 
     setIsGenerating(true)
 
-    // Simulate API call to generate resume
-    setTimeout(() => {
-      setTailoredResume(
-        `# John Doe\n\n**Software Engineer**\n\njohn.doe@example.com | (123) 456-7890 | linkedin.com/in/johndoe\n\n## Summary\n\nResults-driven software engineer with 5+ years of experience in web development. Proficient in React, Node.js, and cloud technologies with a strong focus on creating scalable and maintainable applications.\n\n## Experience\n\n### Senior Frontend Developer | TechCorp\n*Jan 2021 - Present*\n\n- Led development of responsive web applications using React and TypeScript\n- Implemented CI/CD pipelines reducing deployment time by 40%\n- Mentored junior developers and conducted code reviews\n\n### Software Engineer | WebSolutions Inc.\n*Mar 2018 - Dec 2020*\n\n- Developed and maintained RESTful APIs using Node.js and Express\n- Collaborated with UX designers to implement user-friendly interfaces\n- Optimized database queries resulting in 30% performance improvement\n\n## Skills\n\n- **Frontend**: React, TypeScript, HTML5, CSS3, Tailwind CSS\n- **Backend**: Node.js, Express, RESTful APIs\n- **Database**: MongoDB, PostgreSQL\n- **Tools**: Git, Docker, AWS, CI/CD\n\n## Education\n\n**Bachelor of Science in Computer Science**\n*University of Technology, 2018*`,
-      )
+    try {
+      // Create FormData object
+      const formData = new FormData()
+      formData.append("resume", cvFile)
+      formData.append("jd_text", jobDescription)
+
+      // Make POST request to FastAPI backend
+      const response = await axios.post("https://coverletterapi.onrender.com/analyze", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+
+      // Handle successful response
+      setTailoredResume(response.data.result)
       setIsGenerating(false)
       setShowOutput(true)
-    }, 2000)
+    } catch (error) {
+      console.error("Error generating cover letter:", error)
+      setIsGenerating(false)
+      // Show error message to user
+      alert("Failed to generate cover letter. Please try again.")
+    }
   }
 
   const handleReset = () => {
     setShowOutput(false)
     setJobDescription("")
     setCvUploaded(false)
+    setCvFile(null)
     setTailoredResume("")
   }
 
@@ -61,7 +89,7 @@ export function ResumeGenerator() {
                   <FileText className="h-5 w-5 text-purple-300" />
                   <h3 className="font-medium text-white">Upload Your CV</h3>
                 </div>
-                <FileUploader onUploadSuccess={() => setCvUploaded(true)} />
+                <FileUploader onUploadSuccess={handleFileUploadSuccess} />
               </div>
 
               <div>

@@ -43,6 +43,7 @@ export function ResumeOutput({ content, onReset }: ResumeOutputProps) {
                 max-width: 800px;
                 margin: 0 auto;
                 padding: 20px;
+                color: white;
               }
               h1, h2, h3 { margin-top: 0; }
               h1 { font-size: 24px; }
@@ -118,7 +119,7 @@ export function ResumeOutput({ content, onReset }: ResumeOutputProps) {
           </Button>
         </div>
 
-        <div className="max-h-[60vh] overflow-y-auto rounded-lg border border-gray-700 bg-gray-900/60 p-6">
+        <div className="max-h-[60vh] overflow-y-auto rounded-lg border border-gray-700 bg-white p-6">
           <div
             ref={previewRef}
             className="prose prose-invert max-w-none prose-headings:text-white prose-a:text-purple-300"
