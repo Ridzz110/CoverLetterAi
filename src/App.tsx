@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 import { BrowserRouter , Routes, Route, Link} from 'react-router-dom';
 import Dashboard from './Pages/Dashboard';
 import { JSX } from 'react/jsx-runtime';
+import SignInPage from './Pages/Signin';
 
 interface HomeProps {
   words: { text: string; className?: string }[];
@@ -360,6 +361,7 @@ export default function App() {
           footerLinks={footerLinks}
         />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/sign-in" element={<SignInPage />} />
       </Routes>
     </div>
   </BrowserRouter>
